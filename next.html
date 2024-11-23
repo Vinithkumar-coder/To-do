@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List - Tasks</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Task List</h1>
+        <ul id="taskList"></ul>
+        <button id="goBackButton">Go Back</button>
+    </div>
+    <script>
+        // Retrieve DOM Elements
+        const taskList = document.getElementById('taskList');
+        const goBackButton = document.getElementById('goBackButton');
+
+        // Fetch tasks from local storage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        // Render tasks in the list
+        function renderTasks() {
+            taskList.innerHTML = ''; // Clear the list
+            tasks.forEach((task, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = task;
+
+                // Add Delete Button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.style.marginLeft = '10px';
+                deleteButton.style.backgroundColor = '#ff4d4d';
+                deleteButton.style.color = '#fff';
+                deleteButton.style.border = 'none';
+                deleteButton.style.borderRadius = '4px';
+                deleteButton.style.cursor = 'pointer';
+
+                // Delete Task on Button Click
+                deleteButton.addEventListener('click', () => {
+                    deleteTask(index);
+                });
+
+                listItem.appendChild(deleteButton); // Attach delete button
+                taskList.appendChild(listItem); // Attach list item to task list
+            });
+        }
+
+        // Delete Task Function
+        function deleteTask(index) {
+            tasks.splice(index, 1); // Remove task from the array
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Update localStorage
+            renderTasks(); // Re-render the task list
+        }
+
+        // Initial Render
+        renderTasks();
+
+        // Go Back Button
+        goBackButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
